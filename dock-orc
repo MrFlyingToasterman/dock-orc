@@ -1,0 +1,83 @@
+#!/bin/bash
+
+#Parameterprüfung help
+if [ "$1" = "--help" ]; then
+  echo "dock-orc"
+  echo "Optionale Flags:"
+  echo "--help     -> Zeigt dieses Bild"
+  echo "--setup    -> Setzt das OracleDB Image auf"
+  echo "--version  -> Zeigt die Versionen an"
+  exit
+fi
+
+#Parameterprüfung setup
+if [ "$1" = "--setup" ]; then
+  echo "[INFO] Setze OracleDB auf ..."
+  echo ""
+  echo "[INFO] Führe 'Docker Pull' aus ..."
+  docker pull sath89/oracle-12c
+  echo ""
+  echo "[INFO] Docker pull abgeschlossen!"
+  echo ""
+  echo "[INFO] Erstelle Verzeichnisse ..."
+  mkdir -p /srv/docker
+  mkdir -p /srv/Oracle-Data
+  echo "[ OK ] Verzeichnisse erstellt!"
+  echo ""
+  echo "[ OK ] Das aufsetzen des OracleDB Images sollte erfolgreich gewesen sein!"
+  exit
+fi
+
+#Parameterprüfung version
+if [ "$1" = "--version" ]; then
+  echo "[INFO] Scriptversion: 1.1"
+  echo "[INFO] Dockerversion: $(docker --version)"
+  echo "[INFO] Uptime: $(uptime)"
+  echo "[INFO] DIESES SKRIPT IST FREIE SOFTWARE! GPLv3!"
+  exit
+fi
+
+#Ausführen
+echo "[INFO] Starte Docker ..."
+systemctl start docker.service
+echo "[ OK ] Docker läuft!"
+echo ""
+echo "[INFO] Starte Oracle Server ..."
+docker run -d -p 8080:8080 -p 1521:1521 -v /srv/docker/Oracle-Data:/u01/app/oracle sath89/oracle-12c
+echo "[ OK ] Oracle docker image läuft nun!"
+echo ""
+echo ""
+echo "Zusammenfassung wichtiger Informationen:"
+echo "----------------------------------------"
+echo "Hostname: localhost"
+echo "Port: 1521"
+echo "Sid: xe"
+echo "Service name: xe"
+echo "Benutzer: SYSTEM"
+echo "Passwort: oracle"
+echo "----------------------------------------"
+echo ""
+echo "[INFO] Verbindung zur Datenbank: localhost:1521/xe"
+echo "[INFO] Verbindung über den Webbrowser (Enterprise Manager): http://localhost:8080/em"
+echo "[INFO] Sie sollten dem Image einige Minuten zur einrichtung lassen!"
+echo ""
+echo ""
+echo "[INFO] Docker läuft nun im Hintergrund!"
+read -n 1 -s -p "[INFO] Drücken Sie eine beliebige Taste zum stoppen!"
+echo ""
+echo ""
+echo "[WARN] Stopsignal wurde ausgelöst, Docker wird nun beendet!"
+echo ""
+echo ""
+echo "[INFO] Beende alle Docker Container ..."
+echo ""
+docker stop $(docker ps -a -q)
+echo ""
+echo "[ OK ] Alle Docker Container beendet!"
+echo ""
+echo "[INFO] Beende Docker Service ..."
+systemctl stop docker.service
+echo "[ OK ] Docker beendet!"
+echo ""
+echo ""
+echo "ready."
