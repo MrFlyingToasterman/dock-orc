@@ -2,7 +2,7 @@
 Ein kleines Tool um ein OracleDB Image in Docker zu verwalten.
 
 # Wie inzu benutzen
-´# dock-orc <--flag>´ <br>
+``# dock-orc <--flag>`` <br>
 Optionale Flags: <br>
 --help     -> Zeigt dieses Bild <br>
 --setup    -> Setzt das OracleDB Image auf <br>
