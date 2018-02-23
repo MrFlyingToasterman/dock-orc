@@ -8,6 +8,9 @@ Optionale Flags: <br>
 --setup    -> Setzt das OracleDB Image auf <br>
 --version  -> Zeigt die Versionen an <br>
 
+# Preview
+![dock-orc](preview0.png?raw=true "Preview")
+
 # License
 ![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)
 
